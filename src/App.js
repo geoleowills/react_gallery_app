@@ -6,10 +6,10 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import SearchForm from "./SearchForm";
-import Gallery from "./Gallery";
-import Nav from "./Nav";
-import NotFound from "./NotFound";
+import SearchForm from "./components/SearchForm";
+import Gallery from "./components/Gallery";
+import Nav from "./components/Nav";
+import NotFound from "./components/NotFound";
 import apiKey from "./config/config";
 
 export default class App extends Component {
@@ -18,12 +18,14 @@ export default class App extends Component {
     this.state = {
       photos: [],
       loading: true,
+      currentTag: "",
     };
   }
 
   performSearch = (tag = "cats") => {
     this.setState({
       loading: true,
+      currentTag: { tag },
     });
     fetch(
       `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=&format=json&nojsoncallback=1`
@@ -38,12 +40,6 @@ export default class App extends Component {
       .catch((error) => {
         console.log("Error fetching and parsing data", error);
       });
-  };
-
-  loadingTrue = () => {
-    this.setState({
-      loading: true,
-    });
   };
 
   render() {
@@ -61,7 +57,7 @@ export default class App extends Component {
                   performSearch={this.performSearch}
                   photos={this.state.photos}
                   loading={this.state.loading}
-                  loadingTrue={this.loadingTrue}
+                  currentTag={this.state.currentTag}
                 />
               )}
             />

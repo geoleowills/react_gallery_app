@@ -12,30 +12,56 @@ import Nav from "./components/Nav";
 import NotFound from "./components/NotFound";
 import apiKey from "./config/config";
 
-export default class App extends Component {
+class App extends Component {
   constructor() {
     super();
     this.state = {
       photos: [],
+      australia: [],
+      animals: [],
+      cars: [],
       loading: true,
-      currentTag: "",
     };
   }
 
-  performSearch = (tag = "cats") => {
-    this.setState({
-      loading: true,
-      currentTag: { tag },
-    });
+  componentDidMount() {
+    this.performSearch("australia");
+    this.performSearch("animals");
+    this.performSearch("cars");
+  }
+
+  performSearch = (tag) => {
+    this.setState({ loading: true });
     fetch(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=&format=json&nojsoncallback=1`
+      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=24&format=json&nojsoncallback=1`
     )
       .then((response) => response.json())
       .then((response) => {
-        this.setState({
-          photos: response.photos.photo,
-          loading: false,
-        });
+        if (tag === "australia") {
+          this.setState({
+            // Both australia and photos are being set to the same, this is because if the Australia button
+            // has been clicked it will render the /australia page and access the australia state, but
+            // if australia has been searched instead, it will render the /search/australia page and need access
+            // to the photos state instead.
+            australia: response.photos.photo,
+            photos: response.photos.photo,
+          });
+        } else if (tag === "animals") {
+          this.setState({
+            animals: response.photos.photo,
+            photos: response.photos.photo,
+          });
+        } else if (tag === "cars") {
+          this.setState({
+            cars: response.photos.photo,
+            photos: response.photos.photo,
+          });
+        } else {
+          this.setState({
+            photos: response.photos.photo,
+          });
+        }
+        this.setState({ loading: false });
       })
       .catch((error) => {
         console.log("Error fetching and parsing data", error);
@@ -46,25 +72,43 @@ export default class App extends Component {
     return (
       <Router>
         <div className="App">
-          <SearchForm />
+          <SearchForm onSearch={this.performSearch} />
           <Nav />
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/cats" />} />
-            <Route
-              path="/:tag"
-              render={() => (
-                <Gallery
-                  performSearch={this.performSearch}
-                  photos={this.state.photos}
-                  loading={this.state.loading}
-                  currentTag={this.state.currentTag}
-                />
-              )}
-            />
-            <Route component={NotFound} />
-          </Switch>
+          {this.state.loading ? (
+            <h3>Loading...</h3>
+          ) : (
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => <Redirect to="/australia" />}
+              />
+              <Route
+                path="/search/:tag"
+                render={() => <Gallery photos={this.state.photos} />}
+              />
+              <Route
+                exact
+                path="/australia"
+                render={() => <Gallery photos={this.state.australia} />}
+              />
+              <Route
+                exact
+                path="/animals"
+                render={() => <Gallery photos={this.state.animals} />}
+              />
+              <Route
+                exact
+                path="/cars"
+                render={() => <Gallery photos={this.state.cars} />}
+              />
+              <Route component={NotFound} />
+            </Switch>
+          )}
         </div>
       </Router>
     );
   }
 }
+
+export default App;

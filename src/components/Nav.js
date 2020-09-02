@@ -1,23 +1,23 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Nav = (props) => {
+const Nav = () => {
   return (
     <nav className="main-nav">
       <ul>
         <li>
-          <NavLink to="/cats" activeClassName="active">
-            Cats
+          <NavLink to="/australia" activeClassName="active">
+            Australia
           </NavLink>
         </li>
         <li>
-          <NavLink to="/dogs" activeClassName="active">
-            Dogs
+          <NavLink to="/animals" activeClassName="active">
+            Animals
           </NavLink>
         </li>
         <li>
-          <NavLink to="/computers" activeClassName="active">
-            Computers
+          <NavLink to="/cars" activeClassName="active">
+            Cars
           </NavLink>
         </li>
       </ul>

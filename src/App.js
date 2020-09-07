@@ -81,6 +81,8 @@ class App extends Component {
         <div className="App">
           <SearchForm onSearch={this.performSearch} />
           <Nav />
+          {/* If loading is true, it renders the 'loading' h3 element, else it 
+           moves on to the switch component containing a number of routes. */}
           {this.state.loading ? (
             <h3>Loading...</h3>
           ) : (
@@ -109,6 +111,7 @@ class App extends Component {
                 path="/cars"
                 render={() => <Gallery photos={this.state.cars} />}
               />
+              {/* If none of the above routes match then the 'NotFound' page is shown. */}
               <Route component={NotFound} />
             </Switch>
           )}

@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
+// Creates the Nav element, uses NavLinks to show which one is currently active.
 const Nav = () => {
   return (
     <nav className="main-nav">

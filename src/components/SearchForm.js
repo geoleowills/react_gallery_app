@@ -1,20 +1,30 @@
 import React, { Component } from "react";
+
+// withRouter is needed in order for us to use 'this.props.history(path)' and set the url path.
 import { withRouter } from "react-router-dom";
 
+// Creates the search field.
 class SearchForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
+    // Calls the 'performSearch' function created in App.js using the input value.
     this.props.onSearch(this.searchText.value);
+    // Creates the path.
     let path = `/search/${this.searchText.value}`;
+    // Calls the search path in the browser.
     this.props.history.push(path);
+    // Resets the input area.
     e.currentTarget.reset();
   };
 
   render() {
     return (
+      // Calls the handleSubmit function when the form is submitted.
       <form className="search-form" onSubmit={this.handleSubmit}>
         <input
           type="search"
+          // ref links the input field to 'this.searchText', so this.searchText.value can
+          // be called when needed above.
           ref={(input) => (this.searchText = input)}
           name="search"
           placeholder="Search"

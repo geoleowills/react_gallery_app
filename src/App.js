@@ -1,3 +1,4 @@
+// Imports React and React-Rotuer.
 import React, { Component } from "react";
 import {
   BrowserRouter as Router,
@@ -6,13 +7,17 @@ import {
   Redirect,
 } from "react-router-dom";
 
+// Imports components.
 import SearchForm from "./components/SearchForm";
 import Gallery from "./components/Gallery";
 import Nav from "./components/Nav";
 import NotFound from "./components/NotFound";
 import apiKey from "./config/config";
 
+// Creates App component.
 class App extends Component {
+  // Creates the arrays for search photos and default tags,
+  // creates state for whether loading is true or false.
   constructor() {
     super();
     this.state = {
@@ -24,12 +29,14 @@ class App extends Component {
     };
   }
 
+  // Calls the performSearch method for the three options when the component mounts.
   componentDidMount() {
     this.performSearch("australia");
     this.performSearch("animals");
     this.performSearch("cars");
   }
 
+  // Funtion that takes in a 'tag', uses fetch api and saves the relevant data to state.
   performSearch = (tag) => {
     this.setState({ loading: true });
     fetch(
